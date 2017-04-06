@@ -18,20 +18,23 @@ import random
 def insertSort(toSort):
     sorted = []
     sorted.append(toSort[0])
-    print(str(sorted[0]) + "yeah whatever")
 
     for i in range(1, len(toSort)):
         element = toSort[i]
         sorted.append(element)
-        for j in range(len(sorted) - 1, -1, -1):
+        #start at length - 2 to account for the element we just inserted
+        for j in range(len(sorted) - 2, -1, -1):
             if sorted[j] > element:
                 sorted[j + 1] = sorted[j]
-                break;
 
             else:
                 sorted[j + 1] = element
                 break;
 
+            if j == 0:
+                sorted[j] = element
+
+    print("sort is done, here is size: " + str(len(sorted)))
     for i in range(0, len(sorted)):
         print (sorted[i])
 
@@ -46,6 +49,7 @@ def main():
     listToSort = randGen(20)
     for i in range(len(listToSort)):
         print(listToSort[i])
+
     print("now for sorting:")
     insertSort(listToSort)
 
