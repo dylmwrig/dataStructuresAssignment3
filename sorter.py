@@ -83,9 +83,40 @@ def quickSort(toSort, lowIndex, highIndex, pivotIndex):
     for i in range(len(toSort)):
         print("i then value: " + str(i) + " " + str(toSort[i]))
 
+#make sure the root element is the largest
+#if i is the index,
+#the left child of any element is 2i + 1, the right is 2i + 2
+#pass in the "largest" element, initialized to be the root when this function is first called
+def heapify(toSort, largest):
+    root = largest
+    maxSize = len(toSort)
+    left = 2 * largest + 1
+    right = 2 * largest + 2
+    #if the index is not less than the size of the array, the child does not exist
+    if left < maxSize and toSort[left] > toSort[largest]:
+        largest = left
+
+    if right < maxSize and toSort[right] > toSort[largest]:
+        largest = right
+
+    #if the root is not the largest element, swap to make it so
+    if root != largest:
+        temp = toSort[root]
+        toSort[root] = toSort[largest]
+        toSort[largest] = temp
+        heapify(toSort, largest)
+
+    print("result of heapify")
+    print(toSort)
+
 #heap sort
 #use priority queue to sort in nlogn time, worst case 2NlogN - O(N)
 #-build priority queue from input, O(n), then deleteMin N times to generate sequence in sorted order
+#
+#recall the heap requirement that the parent must be larger than the children
+#take advantage of this property: swap the final child element with the root element, which will
+#by this property be the largest element; now, deleteMin to cut off the final child because it is
+#in the proper order. Now, re-heapify the heap by bubbling the largest elements to the top
 def heapSort(toSort):
     print("probably the worst one lol")
 
@@ -102,20 +133,16 @@ def mergeSort(toSort):
     mid = int(len(toSort) / 2)
     left = toSort[:mid]
     right = toSort[mid:len(toSort)]
-    mergeSort(left)
+    mergeSort(left) #sort the left and right halves until they are one element
     mergeSort(right)
-#    test = [4, 1, 6, 3, 5, 2, 7]
-#    left = test[:4]
-#    right = test[4:]
-#    left = merge(left[:3], left[3:])
-#    right = merge(right[:3], right[3:])
-    merge(left, right, toSort)
+    merge(left, right, toSort) #sort each subarray back until you have the final, sorted array
 
 #called by mergeSort
-#left and right halves of the array, each is already sorted
+#pass in the right and left subarrays, in addition to the complete array we're sorting
 def merge(left, right, output):
     leftIndex, rightIndex, outIndex = 0, 0, 0
     while leftIndex < len(left) and rightIndex < len(right):
+        #move elements from each subarray into the output array based on which is smaller
         if left[leftIndex] <= right[rightIndex]:
             output[outIndex] = left[leftIndex]
             leftIndex += 1
@@ -125,7 +152,8 @@ def merge(left, right, output):
             rightIndex += 1
             outIndex += 1
 
-    #one of these two loops will execute, depending on which of the two lists has been "emptied"
+    #one array will be empty before the other, so only one of these will execute
+    #empty the other array into the output
     while leftIndex < len(left):
         output[outIndex] = left[leftIndex]
         leftIndex += 1
@@ -134,7 +162,6 @@ def merge(left, right, output):
         output[outIndex] = right[rightIndex]
         rightIndex += 1
         outIndex += 1
-    return output
 
 #generate a list of given size filled with random numbers from 0 to 20000
 def randGen(listSize):
@@ -161,11 +188,11 @@ def main():
     #print("now for sorting:")
     #insertSort(listToSort)
 
-    print("before mergeSort")
+    print("element at max size")
+    print(str(listToSort[len(listToSort) - 1]))
+    print("randomly generated list")
     print(listToSort)
-    mergeSort(listToSort)
-    print("after mergeSort")
-    print (listToSort)
+    heapify(listToSort, 0)
 
 if (__name__ == "__main__"):
     main()
