@@ -105,8 +105,13 @@ def heapify(toSort, largest):
         toSort[root] = toSort[largest]
         toSort[largest] = temp
         heapify(toSort, largest)
+        print("result of heapify (something changed)")
+        print(toSort)
 
-    print("result of heapify")
+def buildHeap(toSort):
+    for i in range(len(toSort) - 1, -1, -1):
+        heapify(toSort, i)
+    print("built?")
     print(toSort)
 
 #heap sort
@@ -192,7 +197,8 @@ def main():
     print(str(listToSort[len(listToSort) - 1]))
     print("randomly generated list")
     print(listToSort)
-    heapify(listToSort, 0)
+    #heapify(listToSort, 0)
+    buildHeap(listToSort)
 
 if (__name__ == "__main__"):
     main()
