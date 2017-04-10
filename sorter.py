@@ -34,9 +34,12 @@ def insertSort(toSort):
             if j == 0: #if the final inserted element is smaller than everything else, place it as the 0th element
                 sorted[j] = element
 
-def quickSortBlastoff(toSort):
-    quickSort(toSort, 0, len(listToSort) - 2, len(listToSort) - 1)
-    #quickSort(toSort, 0, )
+def quickSortBlastoff(toSort, start, end):
+    if start < end:
+        pivot = quickSort(toSort, start, end)
+        quickSortBlastoff(toSort, start, pivot - 1)
+        quickSortBlastoff(toSort, pivot + 1, end)
+    return toSort
 
 #quick sort
 #divide and conquer algorithm with worst case n^2 and average case nlogn
@@ -44,10 +47,9 @@ def quickSortBlastoff(toSort):
 #select an element in the array known as the 'pivot'
 #sort so that each element to the left is less than or equal to the pivot, each to the right is greater than
 #recursively quick sort each sub array to the left and right of the pivot
-def quickSort(toSort, lowIndex, highIndex, pivotIndex):
+def quickSort(toSort, lowIndex, highIndex):
     print("toSort index = " + str(toSort[0]))
-    highIndex = pivotIndex - 1
-    lowIndex = 0
+    pivotIndex = highIndex + 1
     pivot = toSort[pivotIndex] #choose the right most element to be the pivot
     high = toSort[highIndex]
     low = toSort[lowIndex]
@@ -58,13 +60,16 @@ def quickSort(toSort, lowIndex, highIndex, pivotIndex):
     #until an element smaller than the pivot is found. Then, swap these elements
     #finally, when the low and high indexes meet each other in the middle, swap the larger one with the pivot
 
-    while lowIndex != highIndex:
+    while lowIndex <= highIndex:
+        print("At the top of while, low then high index: " + str(lowIndex) + " " + str(highIndex))
         while low <= pivot:
             lowIndex += 1
+            print("here is new low index: " + str(lowIndex))
             low = toSort[lowIndex]
 
-        while high > pivot:
+        while high >= pivot:
             highIndex -= 1
+            print("here is new high index: " + str(highIndex))
             high = toSort[highIndex]
 
         temp = low
@@ -72,16 +77,33 @@ def quickSort(toSort, lowIndex, highIndex, pivotIndex):
         toSort[highIndex] = temp
         lowIndex += 1
         highIndex -= 1
+        print("Low index: " + str(lowIndex))
+        print("High index: " + str(highIndex))
         low = toSort[lowIndex]
         high = toSort[highIndex]
+
+    #they're now linked to the wrong positions so swap them back
+    high = toSort[lowIndex]
+    low = toSort[highIndex]
+    print("Here are high, low, and pivot at the end: " + str(high) + " " + str(low) + " " + str(pivot))
+    #swap the pivot to be in the middle where it belongs
     if high > pivot:
         temp = pivot
         toSort[pivotIndex] = high
         toSort[highIndex] = temp
+        pivotIndex = highIndex
+
+    #else:
+    #    print("High is not larger than pivot so we'll do something else")
+    #    temp = pivot
+    #    toSort[pivotIndex] = toSort[highIndex + 1]
+    #    toSort[highIndex + 1] = temp
 
     print("after 'sort', pivot then list " + str(pivot) + " " + str(pivotIndex))
     for i in range(len(toSort)):
-        print("i then value: " + str(i) + " " + str(toSort[i]))
+        print("i then value: " + str(i) + " " + str(toSort[i]) + ", big if true")
+
+    return pivotIndex
 
 #make sure the root element is the largest
 #if i is the index,
@@ -193,18 +215,23 @@ def main():
     #for i in range(len(listToSort)):
     #    print(listToSort[i])
 
-    #print("Now for quickSort")
-    #quickSort(listToSort, 0, len(listToSort) - 2, len(listToSort) - 1)
-    #quickSortBlastoff(listToSort)
-    #print("now for sorting:")
-    #insertSort(listToSort)
 
     print("element at max size")
     print(str(listToSort[len(listToSort) - 1]))
     print("randomly generated list")
     print(listToSort)
+
+    print("Now for quickSort")
+    #quickSort(listToSort, 0, len(listToSort) - 2, len(listToSort) - 1)
+    sorted = quickSortBlastoff(listToSort, 0, len(listToSort) - 2)
+    print("release me from this coil")
+    print(sorted)
+
+    #print("now for sorting:")
+    #insertSort(listToSort)
+
     #heapify(listToSort, 0)
-    heapSort(listToSort)
+    #heapSort(listToSort)
 
 if (__name__ == "__main__"):
     main()
