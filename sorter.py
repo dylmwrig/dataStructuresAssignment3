@@ -87,16 +87,16 @@ def quickSort(toSort, lowIndex, highIndex, pivotIndex):
 #if i is the index,
 #the left child of any element is 2i + 1, the right is 2i + 2
 #pass in the "largest" element, initialized to be the root when this function is first called
-def heapify(toSort, largest):
+#pass in the array size as this will "change" as the max is deleted
+def heapify(toSort, largest, arrSize):
     root = largest
-    maxSize = len(toSort)
     left = 2 * largest + 1
     right = 2 * largest + 2
     #if the index is not less than the size of the array, the child does not exist
-    if left < maxSize and toSort[left] > toSort[largest]:
+    if left < arrSize and toSort[left] > toSort[largest]:
         largest = left
 
-    if right < maxSize and toSort[right] > toSort[largest]:
+    if right < arrSize and toSort[right] > toSort[largest]:
         largest = right
 
     #if the root is not the largest element, swap to make it so
@@ -104,13 +104,14 @@ def heapify(toSort, largest):
         temp = toSort[root]
         toSort[root] = toSort[largest]
         toSort[largest] = temp
-        heapify(toSort, largest)
+        heapify(toSort, largest, arrSize)
         print("result of heapify (something changed)")
         print(toSort)
 
+#heapify from the bottom up, starting at the last element up to the root
 def buildHeap(toSort):
     for i in range(len(toSort) - 1, -1, -1):
-        heapify(toSort, i)
+        heapify(toSort, i, len(toSort))
     print("built?")
     print(toSort)
 
@@ -123,7 +124,12 @@ def buildHeap(toSort):
 #by this property be the largest element; now, deleteMin to cut off the final child because it is
 #in the proper order. Now, re-heapify the heap by bubbling the largest elements to the top
 def heapSort(toSort):
-    print("probably the worst one lol")
+    buildHeap(toSort)
+    for i in range(len(toSort) - 1, -1, -1):
+        temp = toSort[0]
+        toSort[0] = toSort[i]
+        toSort[i] = temp
+        heapify(toSort, 0, i)
 
 #merge sort
 #divide and conquer algorithm similar to quickSort, NlogN worst case
@@ -198,7 +204,7 @@ def main():
     print("randomly generated list")
     print(listToSort)
     #heapify(listToSort, 0)
-    buildHeap(listToSort)
+    heapSort(listToSort)
 
 if (__name__ == "__main__"):
     main()
