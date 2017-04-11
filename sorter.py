@@ -38,9 +38,11 @@ def insertSort(toSort):
 def quickSortBlastoff(toSort, start, end):
     if start < end:
         pivot = quickSort(toSort, start, end)
+        print("at the top of blastoff")
         print("pivot: " + str(pivot))
+        print("start and end: " + str(start) + " " + str(end))
         quickSortBlastoff(toSort, start, pivot - 1)
-        quickSortBlastoff(toSort, pivot + 1, end)
+        quickSortBlastoff(toSort, pivot + 1, end) #originally did pivot + 1 rather than just pivot
         print("start, pivot, then end: " + str(start) + " " + str(pivot) + " " + str(end))
     #return toSort
 
@@ -53,58 +55,42 @@ def quickSortBlastoff(toSort, start, end):
 def quickSort(toSort, lowIndex, highIndex):
     #print("toSort index = " + str(toSort[0]))
     pivotIndex = highIndex + 1
-    pivot = toSort[pivotIndex] #choose the right most element to be the pivot
-    high = toSort[highIndex]
-    low = toSort[lowIndex]
+    print("pivot, high, then low index at the top: " + str(pivotIndex) + " " + str(highIndex) + " " + str(lowIndex))
     #print("before anything, pivot and index: " + str(pivot) + " " + str(pivotIndex))
+
     #keep an index for lower elements and an index for higher
     #start the low side on the left, start the high side on the right, one to the left of the pivot
     #if you find an element larger than the pivot on the low side, move through the higher elements
     #until an element smaller than the pivot is found. Then, swap these elements
     #finally, when the low and high indexes meet each other in the middle, swap the larger one with the pivot
 
-    while lowIndex <= highIndex:
+    keepGoing = True
+    while keepGoing:
         #print("At the top of while, low then high index: " + str(lowIndex) + " " + str(highIndex))
-        while low <= pivot:
+        while lowIndex <= highIndex and toSort[lowIndex] <= toSort[pivotIndex]:
             lowIndex += 1
             #print("here is new low index: " + str(lowIndex))
-            if (lowIndex > highIndex):
-                break
-            low = toSort[lowIndex]
 
-        while high >= pivot:
+        while highIndex >= lowIndex and toSort[highIndex] >= toSort[pivotIndex]:
             highIndex -= 1
             #print("here is new high index: " + str(highIndex))
-            if (highIndex < lowIndex):
-                break
-            high = toSort[highIndex]
 
-        temp = low
-        toSort[lowIndex] = high
-        toSort[highIndex] = temp
-        lowIndex += 1
-        highIndex -= 1
-        #print("Low index: " + str(lowIndex))
-        #print("High index: " + str(highIndex))
-        low = toSort[lowIndex]
-        high = toSort[highIndex]
+        #is this conditional even necessary?
+        if lowIndex < highIndex:
+            temp = toSort[lowIndex]
+            toSort[lowIndex] = toSort[highIndex]
+            toSort[highIndex] = temp
+            lowIndex += 1
+            highIndex -= 1
 
-    #they're now linked to the wrong positions so swap them back
-    high = toSort[lowIndex]
-    low = toSort[highIndex]
-    #print("Here are high, low, and pivot at the end: " + str(high) + " " + str(low) + " " + str(pivot))
+        else:
+            keepGoing = False
+
     #swap the pivot to be in the middle where it belongs
-    if high > pivot:
-        temp = pivot
-        toSort[pivotIndex] = high
-        toSort[highIndex] = temp
-        pivotIndex = highIndex
-
-    #else:
-    #    print("High is not larger than pivot so we'll do something else")
-    #    temp = pivot
-    #    toSort[pivotIndex] = toSort[highIndex + 1]
-    #    toSort[highIndex + 1] = temp
+    temp = toSort[pivotIndex]
+    toSort[pivotIndex] = toSort[lowIndex]
+    toSort[lowIndex] = temp
+    pivotIndex = lowIndex
 
     #print("after 'sort', pivot then list " + str(pivot) + " " + str(pivotIndex))
     #for i in range(len(toSort)):
