@@ -1,0 +1,63 @@
+Insert sort running timeunordered: 0.0021267160092150565
+ordered: 0.00029294197995421555
+Heap sort running timeunordered: 0.0017957129544930671
+ordered: 0.0019406871606309928
+Merge sort running timeunordered: 0.0014600057219907913
+ordered: 0.0014907967038253938
+
+
+
+Insert sort running timeunordered: 0.048832786579579505
+ordered: 0.0015793207765998907
+Heap sort running timeunordered: 0.012520810641021202
+ordered: 0.014052661987292728
+Merge sort running timeunordered: 0.008585124449023165
+ordered: 0.009548197936405517
+
+
+
+Insert sort running timeunordered: 0.23000863430448945
+ordered: 0.0032890755734713006
+Heap sort running timeunordered: 0.0304343196283528
+ordered: 0.03197386872008301
+Merge sort running timeunordered: 0.018217569932948374
+ordered: 0.018965106547488453
+
+
+
+Insert sort running timeunordered: 0.9223819219303209
+ordered: 0.0064383087711106235
+Heap sort running timeunordered: 0.062364140138311264
+ordered: 0.06650467189001463
+Merge sort running timeunordered: 0.04031822479726044
+ordered: 0.040736041314655136
+
+
+
+Insert sort running timeunordered: 5.786879791579265
+ordered: 0.016666046570504633
+Heap sort running timeunordered: 0.19503478311816025
+ordered: 0.1996072439205987
+Merge sort running timeunordered: 0.11191367235059602
+ordered: 0.1084561016820853
+
+
+
+Insert sort running timeunordered: 15.503164842514819
+ordered: 0.027572041275313097
+Heap sort running timeunordered: 0.30900589176884097
+ordered: 0.32251714565887823
+Merge sort running timeunordered: 0.18664252995812802
+ordered: 0.18034876774063235
+
+
+
+Insert sort running timeunordered: 24.319810105172586
+ordered: 0.036506130185124164
+Heap sort running timeunordered: 0.42376045984621413
+ordered: 0.47965464492652643
+Merge sort running timeunordered: 0.24120286681147007
+ordered: 0.25228933088202865
+
+
+

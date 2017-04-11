@@ -10,6 +10,7 @@
 #graph comparing execution times
 
 import random
+import timeit #time the execution of each sorting algorithm
 
 #insertion sort
 #given a 'key' to insert, read in each element individually and compare it to each list element, starting at the end
@@ -37,9 +38,11 @@ def insertSort(toSort):
 def quickSortBlastoff(toSort, start, end):
     if start < end:
         pivot = quickSort(toSort, start, end)
+        print("pivot: " + str(pivot))
         quickSortBlastoff(toSort, start, pivot - 1)
         quickSortBlastoff(toSort, pivot + 1, end)
-    return toSort
+        print("start, pivot, then end: " + str(start) + " " + str(pivot) + " " + str(end))
+    #return toSort
 
 #quick sort
 #divide and conquer algorithm with worst case n^2 and average case nlogn
@@ -48,12 +51,12 @@ def quickSortBlastoff(toSort, start, end):
 #sort so that each element to the left is less than or equal to the pivot, each to the right is greater than
 #recursively quick sort each sub array to the left and right of the pivot
 def quickSort(toSort, lowIndex, highIndex):
-    print("toSort index = " + str(toSort[0]))
+    #print("toSort index = " + str(toSort[0]))
     pivotIndex = highIndex + 1
     pivot = toSort[pivotIndex] #choose the right most element to be the pivot
     high = toSort[highIndex]
     low = toSort[lowIndex]
-    print("before anything, pivot and index: " + str(pivot) + " " + str(pivotIndex))
+    #print("before anything, pivot and index: " + str(pivot) + " " + str(pivotIndex))
     #keep an index for lower elements and an index for higher
     #start the low side on the left, start the high side on the right, one to the left of the pivot
     #if you find an element larger than the pivot on the low side, move through the higher elements
@@ -61,15 +64,19 @@ def quickSort(toSort, lowIndex, highIndex):
     #finally, when the low and high indexes meet each other in the middle, swap the larger one with the pivot
 
     while lowIndex <= highIndex:
-        print("At the top of while, low then high index: " + str(lowIndex) + " " + str(highIndex))
+        #print("At the top of while, low then high index: " + str(lowIndex) + " " + str(highIndex))
         while low <= pivot:
             lowIndex += 1
-            print("here is new low index: " + str(lowIndex))
+            #print("here is new low index: " + str(lowIndex))
+            if (lowIndex > highIndex):
+                break
             low = toSort[lowIndex]
 
         while high >= pivot:
             highIndex -= 1
-            print("here is new high index: " + str(highIndex))
+            #print("here is new high index: " + str(highIndex))
+            if (highIndex < lowIndex):
+                break
             high = toSort[highIndex]
 
         temp = low
@@ -77,15 +84,15 @@ def quickSort(toSort, lowIndex, highIndex):
         toSort[highIndex] = temp
         lowIndex += 1
         highIndex -= 1
-        print("Low index: " + str(lowIndex))
-        print("High index: " + str(highIndex))
+        #print("Low index: " + str(lowIndex))
+        #print("High index: " + str(highIndex))
         low = toSort[lowIndex]
         high = toSort[highIndex]
 
     #they're now linked to the wrong positions so swap them back
     high = toSort[lowIndex]
     low = toSort[highIndex]
-    print("Here are high, low, and pivot at the end: " + str(high) + " " + str(low) + " " + str(pivot))
+    #print("Here are high, low, and pivot at the end: " + str(high) + " " + str(low) + " " + str(pivot))
     #swap the pivot to be in the middle where it belongs
     if high > pivot:
         temp = pivot
@@ -99,9 +106,9 @@ def quickSort(toSort, lowIndex, highIndex):
     #    toSort[pivotIndex] = toSort[highIndex + 1]
     #    toSort[highIndex + 1] = temp
 
-    print("after 'sort', pivot then list " + str(pivot) + " " + str(pivotIndex))
-    for i in range(len(toSort)):
-        print("i then value: " + str(i) + " " + str(toSort[i]) + ", big if true")
+    #print("after 'sort', pivot then list " + str(pivot) + " " + str(pivotIndex))
+    #for i in range(len(toSort)):
+    #    print("i then value: " + str(i) + " " + str(toSort[i]) + ", big if true")
 
     return pivotIndex
 
@@ -127,15 +134,11 @@ def heapify(toSort, largest, arrSize):
         toSort[root] = toSort[largest]
         toSort[largest] = temp
         heapify(toSort, largest, arrSize)
-        print("result of heapify (something changed)")
-        print(toSort)
 
 #heapify from the bottom up, starting at the last element up to the root
 def buildHeap(toSort):
     for i in range(len(toSort) - 1, -1, -1):
         heapify(toSort, i, len(toSort))
-    print("built?")
-    print(toSort)
 
 #heap sort
 #use priority queue to sort in nlogn time, worst case 2NlogN - O(N)
@@ -203,6 +206,14 @@ def randGen(listSize):
         randList.append(random.randint(0, 20000))
     return randList
 
+#return an ordered list for finding best case execution time for each sorting algorithm
+def orderedList(listSize):
+    ordered = []
+    for i in range(listSize):
+        ordered.append(i)
+    return ordered
+
+from datetime import datetime
 def main():
     listToSort = randGen(20)
     #listToSort = []
@@ -215,6 +226,52 @@ def main():
     #for i in range(len(listToSort)):
     #    print(listToSort[i])
 
+    #print("unsorted: ")
+    #print(listToSort)
+    #start = timeit.default_timer()
+    #mergeSort(listToSort)
+    #stop = timeit.default_timer()
+    #print("execution time of mergeSort: " + str(stop - start))
+
+    """
+        output = open("output.txt", "w")
+        listSize = [100, 500, 1000, 2000, 5000, 8000, 10000] #generate lists of these sizes when finding running time
+        for i in range (len(listSize)):
+            unordered = randGen(listSize[i])
+            ordered = orderedList(listSize[i])
+            output.write("Insert sort running time")
+            start = timeit.default_timer()
+            insertSort(unordered)
+            stop = timeit.default_timer()
+            output.write("unordered: " + str(stop - start) + "\n")
+            start = timeit.default_timer()
+            insertSort(ordered)
+            stop = timeit.default_timer()
+            output.write("ordered: " + str(stop - start) + "\n")
+
+            output.write("Heap sort running time")
+            start = timeit.default_timer()
+            heapSort(unordered)
+            stop = timeit.default_timer()
+            output.write("unordered: " + str(stop - start) + "\n")
+            start = timeit.default_timer()
+            heapSort(ordered)
+            stop = timeit.default_timer()
+            output.write("ordered: " + str(stop - start) + "\n")
+
+            output.write("Merge sort running time")
+            start = timeit.default_timer()
+            mergeSort(unordered)
+            stop = timeit.default_timer()
+            output.write("unordered: " + str(stop - start) + "\n")
+            start = timeit.default_timer()
+            mergeSort(ordered)
+            stop = timeit.default_timer()
+            output.write("ordered: " + str(stop - start) + "\n")
+            output.write("\n\n\n")
+
+        print("output should be complete")
+    """
 
     print("element at max size")
     print(str(listToSort[len(listToSort) - 1]))
@@ -223,13 +280,9 @@ def main():
 
     print("Now for quickSort")
     #quickSort(listToSort, 0, len(listToSort) - 2, len(listToSort) - 1)
-    sorted = quickSortBlastoff(listToSort, 0, len(listToSort) - 2)
-    print("release me from this coil")
-    print(sorted)
-
+    quickSortBlastoff(listToSort, 0, len(listToSort) - 2)
     #print("now for sorting:")
     #insertSort(listToSort)
-
     #heapify(listToSort, 0)
     #heapSort(listToSort)
 
