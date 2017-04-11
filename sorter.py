@@ -42,8 +42,10 @@ def quickSortBlastoff(toSort, start, end):
         print("pivot: " + str(pivot))
         print("start and end: " + str(start) + " " + str(end))
         quickSortBlastoff(toSort, start, pivot - 1)
-        quickSortBlastoff(toSort, pivot + 1, end) #originally did pivot + 1 rather than just pivot
+        quickSortBlastoff(toSort, pivot + 1, end)
         print("start, pivot, then end: " + str(start) + " " + str(pivot) + " " + str(end))
+    else:
+        print("start is greater than or equal to end, here are the values: " + str(start) + " " + str(end))
     #return toSort
 
 #quick sort
@@ -67,12 +69,16 @@ def quickSort(toSort, lowIndex, highIndex):
     keepGoing = True
     while keepGoing:
         #print("At the top of while, low then high index: " + str(lowIndex) + " " + str(highIndex))
-        while lowIndex <= highIndex and toSort[lowIndex] <= toSort[pivotIndex]:
+        #changed it so that it's while the lowIndex is strictly less than the highIndex, rather than less than or equal to
+        #this fixes the recursion issue/issue when the pivot is the largest element
+        while lowIndex < highIndex and toSort[lowIndex] <= toSort[pivotIndex]:
             lowIndex += 1
+            lowVal, pivotVal = toSort[lowIndex], toSort[pivotIndex]
             #print("here is new low index: " + str(lowIndex))
 
-        while highIndex >= lowIndex and toSort[highIndex] >= toSort[pivotIndex]:
+        while highIndex > lowIndex and toSort[highIndex] >= toSort[pivotIndex]:
             highIndex -= 1
+            highVal = toSort[highIndex]
             #print("here is new high index: " + str(highIndex))
 
         #is this conditional even necessary?
@@ -127,8 +133,8 @@ def buildHeap(toSort):
         heapify(toSort, i, len(toSort))
 
 #heap sort
-#use priority queue to sort in nlogn time, worst case 2NlogN - O(N)
-#-build priority queue from input, O(n), then deleteMin N times to generate sequence in sorted order
+#use priority heap to sort in nlogn time, worst case 2NlogN - O(N)
+#-build priority heap from input, O(n), then deleteMin N times to generate sequence in sorted order
 #
 #recall the heap requirement that the parent must be larger than the children
 #take advantage of this property: swap the final child element with the root element, which will
@@ -185,11 +191,21 @@ def merge(left, right, output):
         rightIndex += 1
         outIndex += 1
 
+#TODO
+#do not allow for duplicate values
 #generate a list of given size filled with random numbers from 0 to 20000
 def randGen(listSize):
     randList = []
+    randNum = 0
     for i in range(listSize):
-        randList.append(random.randint(0, 20000))
+        newRand = True
+        #continue generating random numbers if the number is already in the list
+        while newRand:
+            randNum = random.randint(0, 20000)
+            if randNum not in randList:
+                newRand = False
+
+        randList.append(randNum)
     return randList
 
 #return an ordered list for finding best case execution time for each sorting algorithm
@@ -219,45 +235,43 @@ def main():
     #stop = timeit.default_timer()
     #print("execution time of mergeSort: " + str(stop - start))
 
-    """
-        output = open("output.txt", "w")
-        listSize = [100, 500, 1000, 2000, 5000, 8000, 10000] #generate lists of these sizes when finding running time
-        for i in range (len(listSize)):
-            unordered = randGen(listSize[i])
-            ordered = orderedList(listSize[i])
-            output.write("Insert sort running time")
-            start = timeit.default_timer()
-            insertSort(unordered)
-            stop = timeit.default_timer()
-            output.write("unordered: " + str(stop - start) + "\n")
-            start = timeit.default_timer()
-            insertSort(ordered)
-            stop = timeit.default_timer()
-            output.write("ordered: " + str(stop - start) + "\n")
+    output = open("output.txt", "w")
+    listSize = [100, 500, 1000, 2000, 5000, 8000, 10000] #generate lists of these sizes when finding running time
+    for i in range (len(listSize)):
+        unordered = randGen(listSize[i])
+        ordered = orderedList(listSize[i])
+        output.write("Insert sort running time")
+        start = timeit.default_timer()
+        insertSort(unordered)
+        stop = timeit.default_timer()
+        output.write("unordered: " + str(stop - start) + "\n")
+        start = timeit.default_timer()
+        insertSort(ordered)
+        stop = timeit.default_timer()
+        output.write("ordered: " + str(stop - start) + "\n")
 
-            output.write("Heap sort running time")
-            start = timeit.default_timer()
-            heapSort(unordered)
-            stop = timeit.default_timer()
-            output.write("unordered: " + str(stop - start) + "\n")
-            start = timeit.default_timer()
-            heapSort(ordered)
-            stop = timeit.default_timer()
-            output.write("ordered: " + str(stop - start) + "\n")
+        output.write("Heap sort running time")
+        start = timeit.default_timer()
+        heapSort(unordered)
+        stop = timeit.default_timer()
+        output.write("unordered: " + str(stop - start) + "\n")
+        start = timeit.default_timer()
+        heapSort(ordered)
+        stop = timeit.default_timer()
+        output.write("ordered: " + str(stop - start) + "\n")
 
-            output.write("Merge sort running time")
-            start = timeit.default_timer()
-            mergeSort(unordered)
-            stop = timeit.default_timer()
-            output.write("unordered: " + str(stop - start) + "\n")
-            start = timeit.default_timer()
-            mergeSort(ordered)
-            stop = timeit.default_timer()
-            output.write("ordered: " + str(stop - start) + "\n")
-            output.write("\n\n\n")
+        output.write("Merge sort running time")
+        start = timeit.default_timer()
+        mergeSort(unordered)
+        stop = timeit.default_timer()
+        output.write("unordered: " + str(stop - start) + "\n")
+        start = timeit.default_timer()
+        mergeSort(ordered)
+        stop = timeit.default_timer()
+        output.write("ordered: " + str(stop - start) + "\n")
+        output.write("\n\n\n")
 
-        print("output should be complete")
-    """
+    print("output should be complete")
 
     print("element at max size")
     print(str(listToSort[len(listToSort) - 1]))
@@ -266,7 +280,9 @@ def main():
 
     print("Now for quickSort")
     #quickSort(listToSort, 0, len(listToSort) - 2, len(listToSort) - 1)
-    quickSortBlastoff(listToSort, 0, len(listToSort) - 2)
+    #quickSortBlastoff(listToSort, 0, len(listToSort) - 2)
+    print("list after quickSort: ")
+    print(listToSort)
     #print("now for sorting:")
     #insertSort(listToSort)
     #heapify(listToSort, 0)
